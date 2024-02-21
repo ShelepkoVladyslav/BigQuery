@@ -1,0 +1,95 @@
+			Questions to the Kickstarter's dataset and answers on the questions:
+
+1. What is the possibility of successfulness of project on the Kickstarter?
+
+with bou as(
+  SELECT *,
+case 
+when state like "%succ%" then 1
+else 0
+end
+as state_new
+FROM `shelepko-project.654345678765.ksprojects`
+)
+select sum(state_new) / count(*) * 100 as ratio_of_successful_projects
+from bou
+
+									Answer:
+									The possibility of successfulness of project 
+									on the Kickstarter is:
+									35.376233623214432%
+
+2. Top 10 succesful project on the Kickstarter with the most budget?
+
+select name, category, country currency, goal, usd_goal_real
+FROM `shelepko-project.654345678765.ksprojects`
+where state like "%succ%"
+order by usd_goal_real desc
+limit 10
+
+									Answer:
+									The output is the list with the 
+									10 succesful project with the most budget
+
+									name,category,currency,goal,usd_goal_real
+									Elite: Dangerous,Video Games,GBP,1250000.0,2015608.88
+									Camelot Unchained,Video Games,USD,2000000.0,2000000.0
+									WISH I WAS HERE,Narrative Film,USD,2000000.0,2000000.0
+									Bring Back MYSTERY SCIENCE THEATER 3000,Television,USD,2000000.0,2000000.0
+									The Veronica Mars Movie Project,Narrative Film,USD,2000000.0,2000000.0
+									Shenmue 3,Video Games,USD,2000000.0,2000000.0
+									Blue Mountain State: The Movie,Narrative Film,USD,1500000.0,1500000.0
+									The Bards Tale IV,Video Games,USD,1250000.0,1250000.0
+									The Newest Hottest Spike Lee Joint,Narrative Film,USD,1250000.0,1250000.0
+									Project Eternity,Video Games,USD,1100000.0,1100000.0
+
+3. Top 20 the most succesful categories on the Kickstarter(and their percentage of success)
+
+with bou as (
+select id, category, state,
+case 
+when state like "%succ%" then 1
+else 0
+end
+as new_state
+FROM `shelepko-project.654345678765.ksprojects`
+)
+select category,
+sum(new_state)  / 133956 * 100 as percentage_of_succ_from_all 
+from bou
+group by category
+order by 2 desc
+Limit 20
+
+									Answer:
+									The output is the list with the 
+									top 20 the most succesful categories 
+									(and their part in percentage)
+									
+									category,percentage_of_succ_from_all
+									Product Design,5.94
+									Tabletop Games,5.87
+									Shorts,4.98
+									Music,4.8
+									Documentary,4.42
+									Theater,3.29
+									Indie Rock,2.7
+									Rock,2.61
+									Art,2.53
+									Food,2.46
+									Film & Video,2.29
+									Country & Folk,2.1
+									Comics,1.87
+									Video Games,1.78
+									Children's Books,1.75
+									Fiction,1.67
+									Nonfiction,1.66
+									Fashion,1.63
+									Narrative Film,1.5
+									Photography,1.4
+
+
+
+
+
+
